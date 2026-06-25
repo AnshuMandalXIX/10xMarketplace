@@ -1,12 +1,12 @@
 // ===== AI TV MARKETPLACE DATA =====
 
 const CATEGORIES = [
-  { id: 'ai-fundamentals', name: 'AI Fundamentals', emoji: '🧠', color: '#7B88FB', bg: '#eef0ff', count: 38 },
-  { id: 'programming',     name: 'Programming',     emoji: '💻', color: '#272659', bg: '#e8e8f5', count: 44 },
-  { id: 'creative',        name: 'Creative AI',     emoji: '🎨', color: '#CDB5FB', bg: '#f5f0ff', count: 29 },
-  { id: 'kids',            name: 'AI for Kids',     emoji: '🧒', color: '#22c55e', bg: '#f0fdf4', count: 22 },
-  { id: 'business',        name: 'Business AI',     emoji: '💼', color: '#f59e0b', bg: '#fffbeb', count: 31 },
-  { id: 'advanced',        name: 'Advanced AI',     emoji: '🚀', color: '#ef4444', bg: '#fef2f2', count: 27 },
+  { id: 'ai-fundamentals', name: 'Workshops',                  emoji: '🧠', color: '#7B88FB', bg: '#eef0ff', count: 38 },
+  { id: 'programming',     name: 'Bonuses',                    emoji: '💰', color: '#272659', bg: '#e8e8f5', count: 44 },
+  { id: 'creative',        name: 'Masterclass',                emoji: '🎓', color: '#CDB5FB', bg: '#f5f0ff', count: 29 },
+  { id: 'kids',            name: 'Personal Training',          emoji: '🏋️', color: '#22c55e', bg: '#f0fdf4', count: 22 },
+  { id: 'business',        name: 'Growth Wealth Masterclass',  emoji: '📈', color: '#f59e0b', bg: '#fffbeb', count: 31 },
+  { id: 'advanced',        name: 'Advanced AI',                emoji: '🚀', color: '#ef4444', bg: '#fef2f2', count: 27 },
 ];
 
 const SUBCATEGORIES = {
