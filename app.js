@@ -1,5 +1,10 @@
 // ===== AI TV MARKETPLACE APP =====
 
+// Format number as Indian Rupees
+function inr(amount) {
+  return '₹' + Number(amount).toLocaleString('en-IN');
+}
+
 let cart = JSON.parse(localStorage.getItem('aitvCart') || '[]');
 let currentCategory = 'all';
 let currentSubcat = 'All';
@@ -107,8 +112,8 @@ function courseCard(course, isDeal = false) {
         <div class="course-instructor">by ${course.instructor}</div>
         <div class="course-footer">
           <div>
-            <span class="course-price">$${course.price.toFixed(2)}</span>
-            <span class="course-original-price">$${course.originalPrice.toFixed(2)}</span>
+            <span class="course-price">${inr(course.price)}</span>
+            <span class="course-original-price">${inr(course.originalPrice)}</span>
           </div>
           <button class="add-to-cart-btn ${inCart ? 'added' : ''}"
             onclick="event.stopPropagation(); addToCart(${course.id})"
@@ -280,8 +285,8 @@ function showProduct(id) {
       <div>
         <div class="buy-box">
           <div>
-            <span class="buy-box-price">$${course.price.toFixed(2)}</span>
-            <span class="buy-box-original">$${course.originalPrice.toFixed(2)}</span>
+            <span class="buy-box-price">${inr(course.price)}</span>
+            <span class="buy-box-original">${inr(course.originalPrice)}</span>
           </div>
           <div class="buy-box-savings">🎉 You save ${discount}% — Limited time!</div>
           <button class="btn-primary" onclick="addToCart(${course.id}); showView('cart')">${inCart ? '✓ Go to Cart →' : '🛒 Add to Cart'}</button>
@@ -366,7 +371,7 @@ function renderCart() {
         <div class="cart-item-cat">by ${c.instructor}</div>
         <div style="font-size:12px;color:#7a789a;margin-top:4px">⭐ ${c.rating} • ${c.duration} • ${c.lessons} lessons</div>
       </div>
-      <div class="cart-item-price">$${c.price.toFixed(2)}</div>
+      <div class="cart-item-price">${inr(c.price)}</div>
       <button class="remove-btn" onclick="removeFromCart(${c.id})">✕</button>
     </div>`).join('');
 
@@ -380,15 +385,15 @@ function updateSummary() {
 
   ['summarySubtotal', 'coSubtotal'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.textContent = `$${subtotal.toFixed(2)}`;
+    if (el) el.textContent = inr(subtotal);
   });
   ['summaryDiscount', 'coDiscount'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.textContent = `-$${discount.toFixed(2)}`;
+    if (el) el.textContent = `-${inr(discount)}`;
   });
   ['summaryTotal', 'coTotal'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.textContent = `$${total.toFixed(2)}`;
+    if (el) el.textContent = inr(total);
   });
 }
 
@@ -420,7 +425,7 @@ function renderCheckout() {
         <div class="co-item-info">
           <div class="co-item-name">${c.title}</div>
         </div>
-        <div class="co-item-price">$${c.price.toFixed(2)}</div>
+        <div class="co-item-price">${inr(c.price)}</div>
       </div>`).join('');
   }
 
@@ -496,9 +501,9 @@ function renderOrderReview() {
     <div class="review-row"><span class="review-label">Email</span><span class="review-value">${email}</span></div>
     <div class="review-row"><span class="review-label">Courses</span><span class="review-value">${cart.length} course${cart.length !== 1 ? 's' : ''}</span></div>
     <div class="review-row"><span class="review-label">Payment</span><span class="review-value">${payLabel}</span></div>
-    <div class="review-row"><span class="review-label">Subtotal</span><span class="review-value">$${subtotal.toFixed(2)}</span></div>
-    ${discount > 0 ? `<div class="review-row"><span class="review-label">Discount</span><span class="review-value" style="color:#22c55e">-$${discount.toFixed(2)}</span></div>` : ''}
-    <div class="review-row" style="font-weight:800;font-size:16px"><span class="review-label">Total Due</span><span class="review-value">$${(subtotal - discount).toFixed(2)}</span></div>
+    <div class="review-row"><span class="review-label">Subtotal</span><span class="review-value">${inr(subtotal)}</span></div>
+    ${discount > 0 ? `<div class="review-row"><span class="review-label">Discount</span><span class="review-value" style="color:#22c55e">-${inr(discount)}</span></div>` : ''}
+    <div class="review-row" style="font-weight:800;font-size:16px"><span class="review-label">Total Due</span><span class="review-value">${inr(subtotal - discount)}</span></div>
   `;
 }
 
