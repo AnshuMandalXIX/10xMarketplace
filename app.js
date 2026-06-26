@@ -381,7 +381,9 @@ function renderCart() {
 function updateSummary() {
   const subtotal = cart.reduce((sum, c) => sum + c.price, 0);
   const discount = activePromo ? subtotal * activePromo : 0;
-  const total = subtotal - discount;
+  const afterDiscount = subtotal - discount;
+  const gst = Math.round(afterDiscount * 0.18);
+  const total = afterDiscount + gst;
 
   ['summarySubtotal', 'coSubtotal'].forEach(id => {
     const el = document.getElementById(id);
@@ -390,6 +392,10 @@ function updateSummary() {
   ['summaryDiscount', 'coDiscount'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = `-${inr(discount)}`;
+  });
+  ['summaryGst', 'coGst'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = `+${inr(gst)}`;
   });
   ['summaryTotal', 'coTotal'].forEach(id => {
     const el = document.getElementById(id);
@@ -496,6 +502,10 @@ function renderOrderReview() {
   const email = document.getElementById('email')?.value || '';
   const payLabel = selectedPayMethod === 'card' ? `Card ending in ${document.getElementById('cardNumber')?.value.slice(-4) || '****'}` : selectedPayMethod === 'paypal' ? 'PayPal' : 'UPI';
 
+  const afterDiscount = subtotal - discount;
+  const gst = Math.round(afterDiscount * 0.18);
+  const total = afterDiscount + gst;
+
   el.innerHTML = `
     <div class="review-row"><span class="review-label">Name</span><span class="review-value">${firstName} ${lastName}</span></div>
     <div class="review-row"><span class="review-label">Email</span><span class="review-value">${email}</span></div>
@@ -503,7 +513,8 @@ function renderOrderReview() {
     <div class="review-row"><span class="review-label">Payment</span><span class="review-value">${payLabel}</span></div>
     <div class="review-row"><span class="review-label">Subtotal</span><span class="review-value">${inr(subtotal)}</span></div>
     ${discount > 0 ? `<div class="review-row"><span class="review-label">Discount</span><span class="review-value" style="color:#22c55e">-${inr(discount)}</span></div>` : ''}
-    <div class="review-row" style="font-weight:800;font-size:16px"><span class="review-label">Total Due</span><span class="review-value">${inr(subtotal - discount)}</span></div>
+    <div class="review-row"><span class="review-label">GST (18%)</span><span class="review-value" style="color:#f59e0b">+${inr(gst)}</span></div>
+    <div class="review-row" style="font-weight:800;font-size:16px"><span class="review-label">Total Due</span><span class="review-value">${inr(total)}</span></div>
   `;
 }
 
