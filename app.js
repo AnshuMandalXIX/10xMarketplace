@@ -579,17 +579,14 @@ function formatExpiry(input) {
 // ===== SEARCH =====
 function performSearch() {
   const query = document.getElementById('searchInput').value.trim().toLowerCase();
-  const catFilter = document.getElementById('searchCatSelect').value;
   if (!query) return;
 
-  let results = COURSES.filter(c => {
-    const matchesText = c.title.toLowerCase().includes(query) ||
-      c.desc.toLowerCase().includes(query) ||
-      c.instructor.toLowerCase().includes(query) ||
-      c.subcategory.toLowerCase().includes(query);
-    const matchesCat = catFilter === 'all' || c.category === catFilter;
-    return matchesText && matchesCat;
-  });
+  let results = COURSES.filter(c =>
+    c.title.toLowerCase().includes(query) ||
+    c.desc.toLowerCase().includes(query) ||
+    c.instructor.toLowerCase().includes(query) ||
+    c.subcategory.toLowerCase().includes(query)
+  );
 
   document.getElementById('searchResultsTitle').textContent =
     `🔍 "${query}" — ${results.length} result${results.length !== 1 ? 's' : ''}`;

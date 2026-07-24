@@ -19,15 +19,6 @@
 
     <div class="nav-search">
       <div class="search-box">
-        <select class="search-category-select" id="searchCatSelect">
-          <option value="all">All Categories</option>
-          <option value="ai-fundamentals">AI Fundamentals</option>
-          <option value="programming">Programming</option>
-          <option value="creative">Creative AI</option>
-          <option value="kids">AI for Kids</option>
-          <option value="business">Business AI</option>
-          <option value="advanced">Advanced AI</option>
-        </select>
         <input type="text" class="search-input" id="searchInput" placeholder="Search courses, topics, skills..." />
         <button class="search-btn" onclick="performSearch()">🔍</button>
       </div>
@@ -224,37 +215,9 @@
     <!-- Subcategory tabs -->
     <div class="subcategory-tabs" id="subcategoryTabs"></div>
 
-    <div class="filter-sidebar-layout">
-      <!-- Sidebar Filters -->
-      <aside class="filter-sidebar">
-        <h3>🎛️ Filters</h3>
-        <div class="filter-group">
-          <h4>Price Range</h4>
-          <label><input type="checkbox" value="under-10" onchange="applyFilters()"> Under $10</label>
-          <label><input type="checkbox" value="10-25" onchange="applyFilters()"> $10 – $25</label>
-          <label><input type="checkbox" value="25-50" onchange="applyFilters()"> $25 – $50</label>
-          <label><input type="checkbox" value="over-50" onchange="applyFilters()"> Over $50</label>
-        </div>
-        <div class="filter-group">
-          <h4>Level</h4>
-          <label><input type="checkbox" value="beginner" onchange="applyFilters()"> Beginner</label>
-          <label><input type="checkbox" value="intermediate" onchange="applyFilters()"> Intermediate</label>
-          <label><input type="checkbox" value="advanced" onchange="applyFilters()"> Advanced</label>
-        </div>
-        <div class="filter-group">
-          <h4>Rating</h4>
-          <label><input type="radio" name="rating" value="4.5" onchange="applyFilters()"> ⭐ 4.5 & up</label>
-          <label><input type="radio" name="rating" value="4.0" onchange="applyFilters()"> ⭐ 4.0 & up</label>
-          <label><input type="radio" name="rating" value="any"> Any Rating</label>
-        </div>
-        <button class="clear-filters-btn" onclick="clearFilters()">Clear All Filters</button>
-      </aside>
-
-      <!-- Course Results -->
-      <div class="courses-results">
-        <div class="results-count" id="resultsCount">Showing all courses</div>
-        <div class="courses-grid" id="categoryCourseGrid"></div>
-      </div>
+    <div class="courses-results">
+      <div class="results-count" id="resultsCount">Showing all courses</div>
+      <div class="courses-grid" id="categoryCourseGrid"></div>
     </div>
   </div>
 
