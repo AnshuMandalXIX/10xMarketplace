@@ -33,6 +33,7 @@ function showView(viewName) {
 
   if (viewName === 'cart') renderCart();
   if (viewName === 'checkout') renderCheckout();
+  if (viewName === 'account') renderAccountView(currentUser);
 }
 
 // ===== CATEGORY GRID =====
@@ -527,9 +528,26 @@ function placeOrder() {
   const btn = document.querySelector('#checkout-step-3 .btn-primary');
   if (btn) { btn.textContent = '⏳ Processing...'; btn.disabled = true; }
 
-  setTimeout(() => {
+  setTimeout(async () => {
     const orderId = 'AITV-' + Date.now().toString(36).toUpperCase();
     document.getElementById('orderId').textContent = orderId;
+
+    // Save order to Firestore if user is logged in
+    const subtotal = cart.reduce((sum, c) => sum + c.price, 0);
+    const discount = activePromo ? subtotal * activePromo : 0;
+    const afterDiscount = subtotal - discount;
+    const gst = Math.round(afterDiscount * 0.18);
+    const total = afterDiscount + gst;
+
+    if (typeof saveOrderToFirestore === 'function') {
+      await saveOrderToFirestore({
+        orderId,
+        courses: cart.map(c => ({ id: c.id, title: c.title, price: c.price, emoji: c.emoji })),
+        subtotal, discount, gst, total,
+        email: document.getElementById('email')?.value || (currentUser?.email || ''),
+        name: (document.getElementById('firstName')?.value || '') + ' ' + (document.getElementById('lastName')?.value || '')
+      });
+    }
 
     const successCourses = document.getElementById('successCourses');
     if (successCourses) {
@@ -544,6 +562,7 @@ function placeOrder() {
     }
 
     showView('success');
+    if (btn) { btn.textContent = '🔐 Place Order & Pay'; btn.disabled = false; }
   }, 2000);
 }
 
@@ -638,4 +657,101 @@ function startCountdown() {
 // ===== SCROLL TO SECTION =====
 function scrollToSection(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== AUTH UI =====
+function renderAccountView(user) {
+  const authSection = document.getElementById('authSection');
+  const dashSection = document.getElementById('dashboardSection');
+  if (!authSection || !dashSection) return;
+
+  if (user) {
+    authSection.classList.add('hidden');
+    dashSection.classList.remove('hidden');
+    const name = user.displayName || user.email.split('@')[0];
+    document.getElementById('dashName').textContent = `Welcome, ${name}!`;
+    document.getElementById('dashEmail').textContent = user.email;
+    document.getElementById('dashAvatar').textContent = name[0].toUpperCase();
+  } else {
+    authSection.classList.remove('hidden');
+    dashSection.classList.add('hidden');
+  }
+}
+
+function switchAuthTab(tab) {
+  document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+  document.getElementById('loginTab').classList.toggle('active', tab === 'login');
+  document.getElementById('signupTab').classList.toggle('active', tab === 'signup');
+  document.getElementById('loginError').textContent = '';
+  document.getElementById('signupError').textContent = '';
+}
+
+async function handleSignIn() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.textContent = '';
+  if (!email || !password) { errEl.textContent = '⚠️ Please fill in all fields.'; return; }
+  try {
+    await signInUser(email, password);
+    showToast('✅ Signed in successfully!');
+  } catch (e) {
+    errEl.textContent = '❌ ' + e.message;
+  }
+}
+
+async function handleSignUp() {
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const confirm = document.getElementById('signupConfirm').value;
+  const errEl = document.getElementById('signupError');
+  errEl.textContent = '';
+  if (!name || !email || !password || !confirm) { errEl.textContent = '⚠️ Please fill in all fields.'; return; }
+  if (password !== confirm) { errEl.textContent = '❌ Passwords do not match.'; return; }
+  if (password.length < 6) { errEl.textContent = '❌ Password must be at least 6 characters.'; return; }
+  try {
+    await signUpUser(name, email, password);
+    showToast('🎉 Account created! Welcome to 10x Marketplace!');
+  } catch (e) {
+    errEl.textContent = '❌ ' + e.message;
+  }
+}
+
+async function handleSignOut() {
+  await signOutUser();
+  showToast('👋 Signed out successfully.');
+  document.getElementById('dashTabContent').innerHTML = '';
+}
+
+async function showDashTab(tab) {
+  const container = document.getElementById('dashTabContent');
+  if (!container) return;
+
+  if (tab === 'orders' || tab === 'courses') {
+    container.innerHTML = '<p style="padding:20px;color:#7a789a">⏳ Loading...</p>';
+    const orders = await getUserOrders();
+    if (orders.length === 0) {
+      container.innerHTML = `<div class="dash-empty"><div style="font-size:48px">📭</div><p>${tab === 'courses' ? 'No courses purchased yet.' : 'No orders yet.'}</p><button class="btn-primary" onclick="showView(\'home\')">Browse Courses</button></div>`;
+      return;
+    }
+    container.innerHTML = `
+      <h3 style="margin-bottom:16px;color:#272659">${tab === 'courses' ? '📚 My Courses' : '🧾 Order History'}</h3>
+      ${orders.map(o => `
+        <div class="order-card">
+          <div class="order-meta">
+            <span class="order-id">#${o.orderId}</span>
+            <span class="order-total">${inr(o.total)}</span>
+          </div>
+          <div class="order-courses">
+            ${(o.courses || []).map(c => `
+              <div class="order-course-item">
+                <span style="font-size:22px">${c.emoji || '📘'}</span>
+                <span>${c.title}</span>
+                <span style="color:#7B88FB;font-weight:700">${inr(c.price)}</span>
+              </div>`).join('')}
+          </div>
+        </div>`).join('')}`;
+  }
 }
