@@ -12,7 +12,7 @@ const CATEGORIES = [
 const SUBCATEGORIES = {
   'ai-fundamentals': ['All', 'Python', 'Tech Skills', 'AI Tools', 'Excel', 'Stock Market'],
   'programming':     ['All', 'Python for AI', 'JavaScript AI', 'AI APIs', 'Build Chatbots', 'AI Tools'],
-  'creative':        ['All', 'AI Art', 'AI Music', 'AI Video', 'AI Writing', 'Image Generation'],
+  'creative':        [],
   'kids':            ['All', 'Scratch + AI', 'Fun Robots', 'AI Games', 'AI Stories', 'Young Coders'],
   'business':        ['All', 'AI Marketing', 'AI Productivity', 'AI for Teams', 'AI Strategy', 'Automation'],
   'advanced':        ['All', 'Deep Learning', 'Computer Vision', 'NLP', 'Reinforcement Learning', 'MLOps'],
