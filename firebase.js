@@ -10,6 +10,9 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+// EmailJS init
+emailjs.init('yf9JP0sM2BvKr3TU1');
 const auth = firebase.auth();
 const db = firebase.firestore();
 
@@ -38,7 +41,16 @@ function updateNavForAuth(user) {
   }
 }
 
-// Sign up: create auth user + save profile to Firestore
+// Send welcome email via EmailJS
+async function sendWelcomeEmail(name, email) {
+  await emailjs.send('service_zz8sayo', 'template_rm342nn', {
+    to_name: name,
+    to_email: email,
+    quote: 'AI will not Replace You, A Person using AI Will'
+  });
+}
+
+// Sign up: create auth user + save profile to Firestore + send welcome email
 async function signUpUser(name, email, password) {
   const cred = await auth.createUserWithEmailAndPassword(email, password);
   await cred.user.updateProfile({ displayName: name });
@@ -47,6 +59,7 @@ async function signUpUser(name, email, password) {
     email,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   });
+  sendWelcomeEmail(name, email); // fire and forget — don't block signup
   return cred.user;
 }
 
