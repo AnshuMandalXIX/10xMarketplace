@@ -150,7 +150,7 @@ function filterCategory(catId) {
 function updateCatNavActive(catId) {
   document.querySelectorAll('.cat-nav-item').forEach((btn, i) => {
     btn.classList.remove('active');
-    const ids = ['all', 'ai-fundamentals', 'programming', 'creative', 'kids', 'business', 'advanced', 'deals'];
+    const ids = ['all', 'ai-fundamentals', 'programming', 'creative'];
     if (ids[i] === catId) btn.classList.add('active');
   });
 }
