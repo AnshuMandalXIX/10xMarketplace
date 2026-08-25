@@ -430,7 +430,19 @@ function applyPromo() {
 }
 
 // ===== CHECKOUT ROUTER =====
+function closeLoginModal() {
+  document.getElementById('loginRequiredOverlay').style.display = 'none';
+  document.getElementById('loginRequiredModal').style.display = 'none';
+}
+
 function proceedToCheckout() {
+  // Block checkout if not logged in
+  if (!currentUser) {
+    document.getElementById('loginRequiredOverlay').style.display = 'block';
+    document.getElementById('loginRequiredModal').style.display = 'block';
+    return;
+  }
+
   // Save lead to Firestore for every checkout attempt
   if (typeof saveCheckoutLead === 'function') {
     const subtotal = cart.reduce((sum, c) => sum + c.price, 0);
