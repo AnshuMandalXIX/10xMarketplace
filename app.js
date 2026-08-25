@@ -434,7 +434,7 @@ function proceedToCheckout() {
   const hasCareerAccelerator = cart.some(c => c.id === 11 || c.id === 12);
   if (hasCareerAccelerator) {
     localStorage.setItem('externalPaymentPending', 'true');
-    window.location.href = 'https://pay.aifortechies.in/checkout/python-0-l2m6s';
+    window.location.href = 'https://pay.aifortechies.in/checkout/python-0-mar07';
     return;
   }
   showView('checkout');
