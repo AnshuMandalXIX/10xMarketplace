@@ -74,6 +74,23 @@ async function signOutUser() {
   await auth.signOut();
 }
 
+// Save checkout lead (fires on every "Proceed to Checkout" click)
+async function saveCheckoutLead(leadData) {
+  try {
+    await db.collection('checkoutLeads').add({
+      courses: leadData.courses,
+      subtotal: leadData.subtotal,
+      cartCount: leadData.cartCount,
+      userId: currentUser ? currentUser.uid : null,
+      userEmail: currentUser ? currentUser.email : null,
+      userName: currentUser ? currentUser.displayName : null,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch (e) {
+    console.error('Checkout lead save failed:', e);
+  }
+}
+
 // Save an order to Firestore under users/{uid}/orders
 async function saveOrderToFirestore(orderData) {
   if (!currentUser) return;

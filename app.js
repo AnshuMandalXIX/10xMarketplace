@@ -431,6 +431,16 @@ function applyPromo() {
 
 // ===== CHECKOUT ROUTER =====
 function proceedToCheckout() {
+  // Save lead to Firestore for every checkout attempt
+  if (typeof saveCheckoutLead === 'function') {
+    const subtotal = cart.reduce((sum, c) => sum + c.price, 0);
+    saveCheckoutLead({
+      courses: cart.map(c => ({ id: c.id, title: c.title, price: c.price, instructor: c.instructor })),
+      subtotal,
+      cartCount: cart.length
+    });
+  }
+
   const hasCareerAccelerator = cart.some(c => c.id === 11 || c.id === 12);
   if (hasCareerAccelerator) {
     localStorage.setItem('externalPaymentPending', 'true');
