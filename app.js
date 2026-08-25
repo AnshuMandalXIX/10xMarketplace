@@ -15,6 +15,16 @@ let filteredCourses = [...COURSES];
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
+  // If user returned from external payment, show the pending confirmation page
+  if (localStorage.getItem('externalPaymentPending') === 'true') {
+    localStorage.removeItem('externalPaymentPending');
+    cart = [];
+    saveCart();
+    updateCartCount();
+    showView('payment-pending');
+    return;
+  }
+
   updateCartCount();
   renderCategoryGrid();
   renderFeaturedCourses();
@@ -417,6 +427,17 @@ function applyPromo() {
     msg.style.color = '#ef4444';
     msg.textContent = `❌ Invalid promo code. Try: AITV20, WELCOME30, KIDS50`;
   }
+}
+
+// ===== CHECKOUT ROUTER =====
+function proceedToCheckout() {
+  const hasCareerAccelerator = cart.some(c => c.id === 11 || c.id === 12);
+  if (hasCareerAccelerator) {
+    localStorage.setItem('externalPaymentPending', 'true');
+    window.location.href = 'https://pay.aifortechies.in/checkout/python-0-l2m6s';
+    return;
+  }
+  showView('checkout');
 }
 
 // ===== CHECKOUT =====

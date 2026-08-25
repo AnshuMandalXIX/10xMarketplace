@@ -242,7 +242,7 @@
             <button onclick="applyPromo()">Apply</button>
           </div>
           <div class="promo-msg" id="promoMsg"></div>
-          <button class="btn-primary full-width" onclick="showView('checkout')">Proceed to Checkout →</button>
+          <button class="btn-primary full-width" onclick="proceedToCheckout()">Proceed to Checkout →</button>
           <div class="secure-badge">🔐 Secure SSL Checkout</div>
         </div>
       </div>
@@ -366,6 +366,31 @@
         <div class="summary-row total-row"><span>Total Due</span><span id="coTotal">₹0</span></div>
         <div class="secure-badge mt-20">🔐 256-bit SSL Encryption<br/>🛡️ Safe & Secure Payment</div>
       </div>
+    </div>
+  </div>
+
+  <!-- EXTERNAL PAYMENT RETURN VIEW -->
+  <div id="view-payment-pending" class="view">
+    <div class="success-page">
+      <div class="success-animation">✅</div>
+      <h1 style="color:#272659">Payment Initiated!</h1>
+      <p class="success-sub" style="font-size:18px;max-width:560px;margin:0 auto 24px">
+        Check your <strong>Email</strong> for the Successful payment confirmation.<br/>
+        All details will be shared with you within <strong>3 Hours</strong>.
+      </p>
+      <div style="background:#f0fdf4;border:2px solid #22c55e;border-radius:16px;padding:20px 28px;display:inline-block;margin-bottom:28px">
+        <p style="margin:0;color:#15803d;font-weight:700;font-size:15px">
+          📩 Didn't receive an email? Need help?
+        </p>
+        <p style="margin:8px 0 0;color:#15803d;font-size:15px">
+          Reach out to our WhatsApp Support:
+          <a href="https://wa.me/918910125705" target="_blank" style="color:#22c55e;font-weight:900;font-size:18px;display:block;margin-top:6px">
+            📱 +91 89101 25705
+          </a>
+        </p>
+      </div>
+      <br/>
+      <button class="btn-primary" onclick="showView('home'); resetOrder()">🏠 Back to Home</button>
     </div>
   </div>
 
